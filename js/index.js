@@ -1,9 +1,9 @@
 let url = "https://randomuser.me/api/?results=15";
-const capitalize = (s) => {
+const capitalize = s => {
   //capitalize a string passed to it
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
+  if (typeof s !== "string") return "";
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+};
 
 let formatDOB = dob => {
   //function returns DOB in format needed for display
@@ -32,11 +32,29 @@ let formatEmployeeData = data => {
   return arrayOfEmployeeData;
 };
 
+let employeeCardsParentWrapper = document.querySelector(
+  "section.employee-cards-parent-wrapper"
+);
+employeeCardsParentWrapper.innerHTML = "";
 fetch(url)
   .then(res => res.json())
   .then(res => res.results)
   .then(res => formatEmployeeData(res))
-  .then(res => console.log(res));
+  .then(res => {
+    res.forEach(employeeCard => {
+      console.log(employeeCard);
+      let { fullName, city, emailAddress, imgSource, dob } = employeeCard;
+      employeeCardsParentWrapper.innerHTML += `<article class="employee-card">
+         <img src=${imgSource} alt="employee's profile picture" class="img--avatar">
+            <div class="employee-card__details">
+              <p class="employee-card__details__name">${fullName}</p>
+              <p class="employee-card__details__email">${emailAddress}</p>
+              <p class="employee-card__details__city">${city}</p>
+              <p class="employee-card__details__birthday">Birthday: ${dob}</p>
+            </div>
+    </article>`;
+    });
+  });
 
 // let arrayOfEmployeesData = getEmployeeData(url);
 // arrayOfEmployeesData.then(res => console.log(res));
